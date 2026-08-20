@@ -47,6 +47,7 @@ KEEP_DIR = os.environ.get('KEEP_DIR', 'keep-inbox')
 KEEP_NOTE_BASE = 'http://localhost:8080/note/'
 NOTE_CACHE_SECONDS = 30
 note_cache = {}            # note_id -> last emitted time
+url_cache = {}             # url -> last emitted time
 _k1 = 1.5
 _b = 0.75
 KEEP_STOPWORDS = set(('a an and are as at be been being but by can could did do does for from had has have how i if in into is it its may might must nor not of on or should so that the their them then there these they this those to was we were what when which who will with would you your most such than too very just also').split(' '))
@@ -93,6 +94,22 @@ def topic_match(text):
                 seen.add(item['url'])
                 results.append(item)
     return results[:5]
+
+def topic_word_matches(text):
+    if not topic_index:
+        return []
+    words = {w for w in re.findall(r'[a-z0-9]+', text.lower()) if len(w) > 2}
+    results = []
+    seen = set()
+    for w in words:
+        for item in topic_index.get(w, []):
+            key = (w, item['url'])
+            if key not in seen:
+                seen.add(key)
+                results.append({'word': w, 'title': item['title'], 'url': item['url']})
+    return results
+
+# ===== emitters =====
 
 # ===== keep-ai exact retrieval (ported from lib/retrieval.js + lib/chat.js) =====
 
@@ -251,25 +268,54 @@ def emit_keep_notes(source, ts, txt):
     if not fresh:
         return
     push_transcript(f'[{ts}] [NOTES] Relevant Notes (keep-ai):')
+    q_words = [w for w in re.split(r'[^a-z0-9]+', (txt or '').lower()) if len(w) > 2]
     for r in fresh:
-        push_transcript(f'[{ts}] [NOTES] {r["title"]} (score {r["score"]})')
+        title = (r.get('title') or '').replace('\r', ' ').replace('\n', ' ')
+        push_transcript(f'[{ts}] [NOTES] {title} (score {r["score"]})')
+        title_l = title.lower()
+        mw = [w for w in q_words if w in title_l]
+        words = ', '.join(mw) if mw else title[:30]
+        push_transcript(f'[{ts}] [KEEP-AI-W] {words} -> {KEEP_NOTE_BASE}{r["id"]}')
     push_transcript(f'[{ts}] [KEEP-AI] matching topics & links:')
     for r in fresh:
-        push_transcript(f'[{ts}] [KEEP-AI] {r["title"]} -> {KEEP_NOTE_BASE}{r["id"]}')
+        title = (r.get('title') or '').replace('\r', ' ').replace('\n', ' ')
+        push_transcript(f'[{ts}] [KEEP-AI] {title} -> {KEEP_NOTE_BASE}{r["id"]}')
+
+def emit_topic_words(ts, txt):
+    matches = topic_word_matches(txt)
+    if not matches:
+        return
+    now = time.time()
+    out = []
+    seen = set()
+    for m in matches:
+        key = m['url']
+        if now - url_cache.get(key, 0) >= NOTE_CACHE_SECONDS:
+            url_cache[key] = now
+            out.append(m)
+            seen.add(key)
+    if not out:
+        return
+    push_transcript(f'[{ts}] [TOPICS] matching words & links:')
+    for m in out[:8]:
+        push_transcript(f'[{ts}] [TOPICS] {m["word"]} -> {m["url"]}')
 
 def after_transcribe(source, ts, txt):
-    push_transcript(f'[{ts}] [{source}]: "{txt}"')
-    logger.info(f"Transcribed [{source}]: {txt[:80]}")
+    txt_clean = txt.replace('\r', ' ').replace('\n', ' ')
+    push_transcript(f'[{ts}] [{source}]: "{txt_clean}"')
+    logger.info(f"Transcribed [{source}]: {txt_clean[:80]}")
     if source == 'SYS':
         for m in topic_match(txt):
             push_transcript(f'[{ts}] [MATCH] {m["title"]} -> {m["url"]}')
-    emit_keep_notes(source, ts, txt)
+    emit_keep_notes(source, ts, txt_clean)
+    emit_topic_words(ts, txt_clean)
 
 def push_transcript(line):
     """Add a transcript line to the queue for SSE broadcasting"""
     if not line:
         return
     global ws_clients
+    line = line.replace('\r', ' ').replace('\n', ' ')
     with ws_lock:
         dead = set()
         for c in list(ws_clients):
@@ -376,12 +422,13 @@ h1{color:#333;margin-bottom:20px}
 .line{padding:5px 0;border-bottom:1px solid #eee;font-family:monospace;font-size:14px}
 .mic{color:#2196F3}
 .sys{color:#4CAF50;font-weight:bold}
-.match{color:#FF9800;font-size:13px}
-.match a,.notes a,.keepai a{color:#FF9800;text-decoration:underline;cursor:pointer}
+ .match{color:#FF9800;font-size:13px}
+.match a,.notes a{color:#2196F3;text-decoration:underline;cursor:pointer}
+.topics a{color:#FF9800;text-decoration:underline;cursor:pointer}
+.keepai a,.keepaiw a{color:#4CAF50;text-decoration:underline;cursor:pointer}
 .notes{color:#2196F3;font-size:13px}
-.notes a{color:#2196F3}
-.keepai{color:#4CAF50;font-size:13px;font-weight:bold}
-.keepai a{color:#4CAF50}
+.match,.topics{color:#FF9800;font-size:13px}
+.keepai,.keepaiw{color:#4CAF50;font-size:13px;font-weight:bold}
 .log{color:#999;font-size:12px}
 .sechead{color:#333;font-weight:bold;font-size:13px;padding-top:4px}
  </style></head>
@@ -402,27 +449,27 @@ es.onmessage=function(e){
   d.className='line';
   if(e.data.includes('[MIC]'))d.classList.add('mic');
   else if(e.data.includes('[SYS]'))d.classList.add('sys');
-  else if(e.data.includes('[MATCH]')||e.data.includes('[NOTES]')||e.data.includes('[KEEP-AI]')){
-    if(e.data.includes('[NOTES]')&&e.data.includes('Relevant Notes'))d.classList.add('sechead');
-    else if(e.data.includes('[KEEP-AI]')&&e.data.includes('matching topics'))d.classList.add('sechead');
-    else{
-      if(e.data.includes('[MATCH]'))d.classList.add('match');
-      else if(e.data.includes('[NOTES]'))d.classList.add('notes');
-      else if(e.data.includes('[KEEP-AI]'))d.classList.add('keepai');
-    }
-    const i=e.data.lastIndexOf('->');
-    if(i>=0){
-      const a=document.createElement('a');
-      a.href=e.data.slice(i+2).trim();
-      a.target='_blank';
-      a.rel='noopener';
-      a.textContent=e.data;
-      d.appendChild(a);
-      t.appendChild(d);
-      t.scrollTop=t.scrollHeight;
-      return;
-    }
-  }
+   else if(e.data.includes('[MATCH]')||e.data.includes('[NOTES]')||e.data.includes('[KEEP-AI]')||e.data.includes('[TOPICS]')||e.data.includes('[KEEP-AI-W]')){
+     if(e.data.includes('[NOTES]')&&e.data.includes('Relevant Notes'))d.classList.add('sechead');
+     else if(e.data.includes('[KEEP-AI]')&&e.data.includes('matching topics'))d.classList.add('sechead');
+     else{
+       if(e.data.includes('[MATCH]')||e.data.includes('[TOPICS]'))d.classList.add('topics');
+       else if(e.data.includes('[NOTES]'))d.classList.add('notes');
+       else if(e.data.includes('[KEEP-AI')||e.data.includes('[KEEP-AI-W]'))d.classList.add('keepai');
+     }
+     const i=e.data.lastIndexOf('->');
+     if(i>=0){
+       const a=document.createElement('a');
+       a.href=e.data.slice(i+2).trim();
+       a.target='_blank';
+       a.rel='noopener';
+       a.textContent=e.data;
+       d.appendChild(a);
+       t.appendChild(d);
+       t.scrollTop=t.scrollHeight;
+       return;
+     }
+   }
   d.textContent=e.data;
   t.appendChild(d);
   t.scrollTop=t.scrollHeight;
