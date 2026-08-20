@@ -143,6 +143,9 @@ def audio_process(model_ref, source, q):
         
         chunk_rms = float(np.sqrt(np.mean(np.array(chunk, dtype=np.float32) ** 2))) if chunk else 0.0
         
+        bar = "#" * int(min(chunk_rms / 50.0, 1.0) * 30)
+        print(f"\r[{source}] RMS={chunk_rms:6.1f} |{bar:<30}|", end="", flush=True)
+        
         if not speech_active:
             if chunk_rms > ENERGY_THRESHOLD:
                 speech_active = True
@@ -306,7 +309,11 @@ def find_devices():
         mic_idx = 1
     if sys_idx is None:
         sys_idx = 3
-    logger.info(f"Selected devices: MIC={mic_idx}, SYS={sys_idx}")
+    p2 = pyaudio.PyAudio()
+    mic_name = p2.get_device_info_by_index(mic_idx).get('name', '?')
+    sys_name = p2.get_device_info_by_index(sys_idx).get('name', '?')
+    p2.terminate()
+    logger.info(f"Selected devices: MIC={mic_idx} ({mic_name}), SYS={sys_idx} ({sys_name})")
     return mic_idx, sys_idx
 
 def main():
