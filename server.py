@@ -77,7 +77,8 @@ def send_line(line):
         dead = set()
         for c in list(ws_clients):
             try:
-                c.send(f'data: {line}\n\n'.encode())
+                c.wfile.write(f'data: {line}\n\n'.encode())
+                c.wfile.flush()
             except:
                 dead.add(c)
         ws_clients -= dead
