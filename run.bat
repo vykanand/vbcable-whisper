@@ -54,10 +54,22 @@ goto :end
 
 :webserver
 echo.
-echo Starting web server...
-echo Open http://localhost:8080 in your browser
+echo Starting web server - any old server will be stopped first...
 echo.
+
+:: Kill any existing process on port 8080
+echo Checking for existing server...
+taskkill /F /IM python.exe 2>nul
+timeout /t 1 /nobreak >nul
+
+:: Wait a moment for port to free
+echo Waiting for port to become free...
+timeout /t 2 /nobreak >nul
+
+echo Starting web server...
 python server.py
+
+goto :end
 
 :end
 echo.
