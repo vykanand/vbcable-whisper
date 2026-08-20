@@ -285,24 +285,29 @@ def run_server():
 def find_devices():
     p = pyaudio.PyAudio()
     n = p.get_host_api_info_by_index(0).get('deviceCount', 0)
-    mic, sys = 1, 3  # Default indices
+    mic_idx = sys_idx = None
     for i in range(n):
         d = p.get_device_info_by_index(i)
-        name = (d.get('name') or '').lower()
+        nm = (d.get('name') or '').lower()
         mi = d.get('maxInputChannels', 0)
-        # Find microphone: any input device that's not a loopback
-        if mic is None and mi > 0 and not any(x in name for x in ['cable output', 'stereo mix', 'loopback', 'what u hear']):
-            mic = i
-        # Find system audio (Cable Output)
-        if 'cable output' in name and mi > 0:
-            sys = i
+        if mic_idx is None and mi > 0 and ("usb enc" in nm or "enc audio" in nm or "headset" in nm):
+            mic_idx = i
+        if sys_idx is None and mi > 0 and "cable output" in nm:
+            sys_idx = i
+    if sys_idx is None:
+        for i in range(n):
+            d = p.get_device_info_by_index(i)
+            nm = (d.get('name') or '').lower()
+            if d.get('maxInputChannels', 0) > 0 and ("stereo mix" in nm or "loopback" in nm or "what u hear" in nm):
+                sys_idx = i
+                break
     p.terminate()
-    if mic is None:
-        mic = 1
-    if sys is None:
-        sys = 3
-    logger.info(f"Selected devices: MIC={mic}, SYS={sys}")
-    return mic, sys
+    if mic_idx is None:
+        mic_idx = 1
+    if sys_idx is None:
+        sys_idx = 3
+    logger.info(f"Selected devices: MIC={mic_idx}, SYS={sys_idx}")
+    return mic_idx, sys_idx
 
 def main():
     global model, topic_index
