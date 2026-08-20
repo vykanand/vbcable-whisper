@@ -101,11 +101,11 @@ def audio_capture(stream, q):
     while not stop_event.is_set():
         try:
             data = stream.read(CHUNK_SIZE, exception_on_overflow=False)
-            samples = struct.unpack(f'{CHUNK_SIZE}h', data)
-            q.put(samples)
+            samples = struct.unpack(f"{len(data)//2}h", data)
+            q.put_nowait(samples)
         except Exception as e:
-            logger.error(f"Audio capture error: {e}")
-            pass
+            if not stop_event.is_set():
+                logger.error(f"Audio capture error: {e}")
 
 def audio_process(model_ref, source, q):
     logger.info(f"Audio process started for {source}")
