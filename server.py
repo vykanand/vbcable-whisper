@@ -109,16 +109,20 @@ def audio_capture(stream, q):
 
 def audio_process(model_ref, source, q):
     logger.info(f"Audio process started for {source}")
-    buf = []
-    silence = 0
-    first_chunk = True
+    buffer = []
+    speech_active = False
+    silence_counter = 0
+    
+    SILENCE_THRESHOLD = 32
+    MIN_BUFFER_SAMPLES = 4800
+    MAX_BUFFER_SAMPLES = 48000
     
     while not stop_event.is_set() or not q.empty():
         try:
             chunk = q.get(timeout=0.1)
         except queue.Empty:
-            if silence > 30 and len(buf) >= 4800:
-                seg = np.array(buf[:48000], dtype=np.float32) / 32768.0
+            if speech_active and len(buffer) >= MIN_BUFFER_SAMPLES:
+                seg = np.array(buffer[:MAX_BUFFER_SAMPLES], dtype=np.float32) / 32768.0
                 try:
                     segments, _ = model_ref.transcribe(seg, language='en', beam_size=5, best_of=5, temperature=0.0)
                     txt = ' '.join(s.text for s in segments).strip()
@@ -132,50 +136,60 @@ def audio_process(model_ref, source, q):
                                 push_transcript(f'[{ts}] [MATCH] {m["title"]} -> {m["url"]}')
                 except Exception as e:
                     logger.error(f"Transcribe error: {e}")
-                buf = []
-                silence = 0
+                buffer = []
+                speech_active = False
+                silence_counter = 0
             continue
         
-        buf.extend(chunk)
-        rms = float(np.sqrt(np.mean(np.array(chunk, dtype=np.float32)**2)))
+        chunk_rms = float(np.sqrt(np.mean(np.array(chunk, dtype=np.float32) ** 2))) if chunk else 0.0
         
-        if first_chunk:
-            silence = 0
-            first_chunk = False
-        
-        if rms <= ENERGY_THRESHOLD:
-            silence += 1
+        if not speech_active:
+            if chunk_rms > ENERGY_THRESHOLD:
+                speech_active = True
+                silence_counter = 0
+                buffer = list(chunk)
         else:
-            silence = 0
-        
-        if silence > 32 and len(buf) >= 4800:
-            seg = np.array(buf[:48000], dtype=np.float32) / 32768.0
-            try:
-                segments, _ = model_ref.transcribe(seg, language='en', beam_size=5, best_of=5, temperature=0.0)
-                txt = ' '.join(s.text for s in segments).strip()
-                if txt:
-                    ts = datetime.datetime.now().strftime('%H:%M:%S')
-                    line = f'[{ts}] [{source}]: "{txt}"'
-                    push_transcript(line)
-                    logger.info(f"Transcribed [{source}]: {txt[:80]}")
-                    if source == 'SYS':
-                        for m in topic_match(txt):
-                            push_transcript(f'[{ts}] [MATCH] {m["title"]} -> {m["url"]}')
-            except Exception as e:
-                pass
-            buf = []
-            silence = 0
-        elif len(buf) > 48000:
-            seg = np.array(buf[:48000], dtype=np.float32) / 32768.0
-            try:
-                segments, _ = model_ref.transcribe(seg, language='en', beam_size=5, best_of=5, temperature=0.0)
-                txt = ' '.join(s.text for s in segments).strip()
-                if txt:
-                    ts = datetime.datetime.now().strftime('%H:%M:%S')
-                    push_transcript(f'[{ts}] [{source}]: "{txt}"')
-            except:
-                pass
-            buf = buf[24000:]
+            buffer.extend(chunk)
+            
+            if chunk_rms > ENERGY_THRESHOLD:
+                silence_counter = 0
+            else:
+                silence_counter += 1
+            
+            if silence_counter >= SILENCE_THRESHOLD:
+                if len(buffer) >= MIN_BUFFER_SAMPLES:
+                    seg_len = min(len(buffer), MAX_BUFFER_SAMPLES)
+                    seg = np.array(buffer[:seg_len], dtype=np.float32) / 32768.0
+                    try:
+                        segments, _ = model_ref.transcribe(seg, language='en', beam_size=5, best_of=5, temperature=0.0)
+                        txt = ' '.join(s.text for s in segments).strip()
+                        if txt:
+                            ts = datetime.datetime.now().strftime('%H:%M:%S')
+                            line = f'[{ts}] [{source}]: "{txt}"'
+                            push_transcript(line)
+                            logger.info(f"Transcribed [{source}]: {txt[:80]}")
+                            if source == 'SYS':
+                                for m in topic_match(txt):
+                                    push_transcript(f'[{ts}] [MATCH] {m["title"]} -> {m["url"]}')
+                    except Exception as e:
+                        logger.error(f"Transcribe error: {e}")
+                buffer = []
+                speech_active = False
+                silence_counter = 0
+            elif len(buffer) >= MAX_BUFFER_SAMPLES:
+                seg = np.array(buffer[:MAX_BUFFER_SAMPLES], dtype=np.float32) / 32768.0
+                try:
+                    segments, _ = model_ref.transcribe(seg, language='en', beam_size=5, best_of=5, temperature=0.0)
+                    txt = ' '.join(s.text for s in segments).strip()
+                    if txt:
+                        ts = datetime.datetime.now().strftime('%H:%M:%S')
+                        line = f'[{ts}] [{source}]: "{txt}"'
+                        push_transcript(line)
+                        logger.info(f"Transcribed [{source}]: {txt[:80]}")
+                except Exception as e:
+                    logger.error(f"Transcribe error: {e}")
+                buffer = buffer[MAX_BUFFER_SAMPLES:]
+                silence_counter = 0
 
 HTML = b'''<!DOCTYPE html>
 <html><head><title>Live Transcription</title>
