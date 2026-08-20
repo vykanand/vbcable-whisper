@@ -296,9 +296,9 @@ def emit_topic_words(ts, txt):
             seen.add(key)
     if not out:
         return
-    push_transcript(f'[{ts}] [TOPICS] matching words & links:')
+    push_transcript(f'[{ts}] [MEDIUM ARTICLES] matching words & links:')
     for m in out[:8]:
-        push_transcript(f'[{ts}] [TOPICS] {m["word"]} -> {m["url"]}')
+        push_transcript(f'[{ts}] [MEDIUM ARTICLES] {m["word"]} -> {m["url"]}')
 
 def after_transcribe(source, ts, txt):
     txt_clean = txt.replace('\r', ' ').replace('\n', ' ')
@@ -449,11 +449,12 @@ es.onmessage=function(e){
   d.className='line';
   if(e.data.includes('[MIC]'))d.classList.add('mic');
   else if(e.data.includes('[SYS]'))d.classList.add('sys');
-   else if(e.data.includes('[MATCH]')||e.data.includes('[NOTES]')||e.data.includes('[KEEP-AI]')||e.data.includes('[TOPICS]')||e.data.includes('[KEEP-AI-W]')){
+   else if(e.data.includes('[MATCH]')||e.data.includes('[NOTES]')||e.data.includes('[KEEP-AI]')||e.data.includes('[MEDIUM ARTICLES]')||e.data.includes('[KEEP-AI-W]')){
      if(e.data.includes('[NOTES]')&&e.data.includes('Relevant Notes'))d.classList.add('sechead');
      else if(e.data.includes('[KEEP-AI]')&&e.data.includes('matching topics'))d.classList.add('sechead');
+     else if(e.data.includes('[MEDIUM ARTICLES]')&&e.data.includes('matching words'))d.classList.add('sechead');
      else{
-       if(e.data.includes('[MATCH]')||e.data.includes('[TOPICS]'))d.classList.add('topics');
+       if(e.data.includes('[MATCH]')||e.data.includes('[MEDIUM ARTICLES]'))d.classList.add('topics');
        else if(e.data.includes('[NOTES]'))d.classList.add('notes');
        else if(e.data.includes('[KEEP-AI')||e.data.includes('[KEEP-AI-W]'))d.classList.add('keepai');
      }
