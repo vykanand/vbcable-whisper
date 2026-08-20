@@ -1,0 +1,1329 @@
+{
+"title": "Topics and links",
+"source": {
+"author": "Vanika Awasthi",
+"published_date": "2023-10-25",
+"read_time": "3 min read",
+"source_type": "Medium"
+},
+"structure": {
+"description": "Structured knowledge index of the topics and resources present in the source document.",
+"resource_types": [
+"medium_article",
+"google_keep",
+"google_doc",
+"image",
+"external_webpage"
+],
+"relationship_types": [
+"primary_resource",
+"supporting_resource",
+"related_resource",
+"reference_resource",
+"duplicate_reference"
+]
+},
+"categories": [
+{
+"id": "solution_architecture",
+"name": "Solution Architecture",
+"topics": [
+{
+"id": "solution_architecture_topics",
+"title": "Solution Architect Topics — KPI List",
+"resources": [
+{
+"id": "r001",
+"title": "KPI LIST",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1-Lny9mswoO3sn7qiZ41jZHchCdmsdTVlX7SYoLlVp39zBtXAxuEhsVquPfajLftEuBh5AaqM"
+}
+]
+},
+{
+"id": "architecture_design",
+"title": "How would you design Architecture?",
+"concepts": [
+"NFRs",
+"Foundation architecture concepts",
+"Architecture design"
+],
+"resources": [
+{
+"id": "r002",
+"title": "How would you design Architecture?",
+"type": "google_doc",
+"relationship": "primary_resource",
+"url": "https://docs.google.com/document/d/1l12T83EiGYoGyxSLqJE3E2StyGyjUfkwMo-GAfQgrOo/edit?usp=sharing"
+},
+{
+"id": "r003",
+"title": "FOUNDATION Arch concepts",
+"type": "google_keep",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1J-PGXbAMyHw0_0Pfwc4ZtJww2W5oMsBoa1Mcct3NuVdXf0kfVokuOFfEx4I13Fw"
+}
+]
+},
+{
+"id": "scratch_design",
+"title": "Scratch Design",
+"concepts": [
+"Architecture design from scratch",
+"Banking architecture",
+"Key pillars",
+"Best practices",
+"In-depth architecture design"
+],
+"resources": [
+{
+"id": "r004",
+"title": "Scratch design",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1okpf1-C6JpQW-jGhCKZewoqeb8_n9zLjnTCBM2x8albDQuYuNqrzMj4sY8dBYRu9QO_1"
+},
+{
+"id": "r005",
+"title": "key pillar",
+"type": "google_keep_media",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/media/v2/1okpf1-C6JpQW-jGhCKZewoqeb8_n9zLjnTCBM2x8albDQuYuNqrzMj4sY8dBYRu9QO_1/1V20u1Q8XZl6-hkwJkZvzFMDUIrWkfpa6Y0Wn0gAHA9x8an8rapbwX7ci8WmT4cg?accept=image%2Fgif%2Cimage%2Fjpeg%2Cimage%2Fjpg%2Cimage%2Fpng%2Caudio%2Faac&sz=727&auditContext=forDisplay"
+},
+{
+"id": "r006",
+"title": "best practice",
+"type": "image",
+"relationship": "supporting_resource",
+"url": "https://lh3.googleusercontent.com/keep-bbsk/AFgXFlKzVa_nhKy4WerelMaQgfaUnSIJZgQ7emIkeBCRmM4SGc6bdJQ1WVUFnJbWiZ_7d8DOxU0jzxFMqPVc1OFuWuxZoSGijJBftLFDglGynqKxbk9JQUyOqw=s727"
+}
+]
+},
+{
+"id": "ddd_canonical_data_model",
+"title": "DDD Canonical Data Model",
+"concepts": [
+"Domain-driven design",
+"Canonical data model",
+"Aggregates",
+"Aggregate roots",
+"Value objects",
+"Control objects",
+"Aggregate control",
+"Value object roots"
+],
+"resources": [
+{
+"id": "r007",
+"title": "DDD Canonical Data model Aggregates root value control objects",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1VkJ8q0pf8Sd0Ekr8xd5sPRstqqRAcVHhGGH7MJ_dMUTyxe5PH8DAd899x2D-xQ"
+},
+{
+"id": "r008",
+"title": "short quick dedicated topic keep",
+"type": "google_keep",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1YbaUzKpHamJMDg-TakrtdFiHCBuBO-DqIEcZXLLWGRTCcnsCvPxNiJtgG9wly_E"
+}
+]
+},
+{
+"id": "when_architect_end_to_end",
+"title": "When did architect END TO END — how?",
+"resources": [
+{
+"id": "r009",
+"title": "When did architect END TO END",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1T_G1aTQMdtlQRIl_hnPj4MACwMYgDQ577YCyHmei5unsOhw_BcU3ir5SRR9VuT0"
+}
+]
+}
+]
+},
+{
+"id": "dsa",
+"name": "DSA and Algorithms",
+"topics": [
+{
+"id": "tech_lead_dsa",
+"title": "Tech Lead DSA",
+"concepts": [
+"Algorithms",
+"Complexity",
+"DSA patterns",
+"Advanced problem solving"
+],
+"resources": [
+{
+"id": "r010",
+"title": "Tech lead DSA — Algo Exp",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1cTL8IcZYqtZyRPOO2E3JPsp8k2hCfmg9-T-7T24kr0LUxhou-JAfXr5PTv7yaeb_x9jT"
+},
+{
+"id": "r011",
+"title": "DSA patterns and solutions",
+"type": "google_keep",
+"relationship": "related_resource",
+"complexity": "complex",
+"url": "https://keep.google.com/u/0/#NOTE/1xIbJE76p5RTcCopuF_oC1lnvKEtFqn-DvZ0pO2NSg7fSwvlivhpu-gnwXk_xDsJgysCWfLjx"
+}
+]
+}
+]
+},
+{
+"id": "ai_architecture",
+"name": "AI Architecture",
+"topics": [
+{
+"id": "ai_architecture_design",
+"title": "AI Architecture Design",
+"concepts": [
+"AI architecture",
+"AI NFRs",
+"RAG",
+"Vector indexes",
+"IVF",
+"HNSW",
+"AI system design"
+],
+"resources": [
+{
+"id": "r012",
+"title": "AI architecture design",
+"type": "google_doc",
+"relationship": "primary_resource",
+"url": "https://docs.google.com/document/d/1yz7HKul7-55soVxAwN_PxxERtaoTqEwDsM_2yHSLEsc/edit?usp=sharing"
+},
+{
+"id": "r013",
+"title": "AI NFR",
+"type": "google_keep",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1RhpLo2ASceT0MZEF6i1xSwyRx4US3cqg_QYmgT-Vzlc1z_J4XPw4aLJL6M7Yz3tIozqV2KZC"
+},
+{
+"id": "r014",
+"title": "Index IVF RAG benchmark",
+"type": "google_keep",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/#NOTE/17BeKTOR4i084WZIFReSm2e-RRge5tIxlpuyIwaFTFf6pbdoBNVB4XvGet9BiocWAP-dDkh0q"
+}
+]
+},
+{
+"id": "rag_ivf_bm25",
+"title": "RAG, IVF and BM25",
+"concepts": [
+"RAG",
+"BM25",
+"Hybrid RAG",
+"IVF",
+"HNSW",
+"Vector search",
+"AI search"
+],
+"resources": [
+{
+"id": "r015",
+"title": "RAG IVF BM25",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1gzxNCi3CrRyWJ9M6l6M3MBcY6BKuQJnoYkGgafqBMNQSwfxVJ6LmoIdCIQPHb1s"
+},
+{
+"id": "r014",
+"title": "Index IVF RAG benchmark",
+"type": "google_keep",
+"relationship": "related_resource",
+"url": "https://keep.google.com/u/0/#NOTE/17BeKTOR4i084WZIFReSm2e-RRge5tIxlpuyIwaFTFf6pbdoBNVB4XvGet9BiocWAP-dDkh0q"
+}
+]
+},
+{
+"id": "ai_industry_use_cases",
+"title": "AI Industry Use Cases",
+"concepts": [
+"Hospital",
+"Insurance",
+"Benchmarking",
+"Algorithm evaluation"
+],
+"resources": [
+{
+"id": "r016",
+"title": "Industry use case Hospital Insurance benchmark algo evals",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1Hy-XVeuKJkUzGGFoymtz9-ntTZh78itZtgtkxIJzcVWhParMoiyZ6GowuZbPil6eK2aLxYNR"
+}
+]
+},
+{
+"id": "ai_chunking",
+"title": "AI Chunking",
+"concepts": [
+"Chunking",
+"Overlap",
+"Sentence transformers",
+"TokenTextSplitter",
+"Document preprocessing"
+],
+"resources": [
+{
+"id": "r017",
+"title": "AI overlap chunking",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/15T_7woEuOKalc3ch0Q1hab52L6rGPxz684SAcc-M74Dr-m9MAqqPsPBGbEAT"
+}
+]
+}
+]
+},
+{
+"id": "llm_evaluation",
+"name": "LLM Evaluation and Benchmarks",
+"topics": [
+{
+"id": "llm_evaluation_metrics",
+"title": "LLM Evaluation Metrics",
+"concepts": [
+"F1",
+"Recall",
+"Accuracy",
+"Hallucination",
+"Business-based evaluation",
+"LLM benchmarks",
+"Leaderboards"
+],
+"resources": [
+{
+"id": "r018",
+"title": "LLM Evaluation Metrics",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1V32RNZ9_J8bCd7-4SyRZd7v8KoBF2PoZUPgXB8RQ43E8NRjXP08ELKcpwQWIays"
+},
+{
+"id": "r019",
+"title": "LLM Model Benchmarks",
+"type": "google_keep",
+"relationship": "related_resource",
+"subtopic": "Business based",
+"url": "https://keep.google.com/u/0/#NOTE/1rxEC33hc2GyliG_aYp0kbV3XBQkogghJPO0a2rOPX6mIwqt1T_FUuKJfYZxXW2BLFMdi5PUj"
+},
+{
+"id": "r019",
+"title": "LLM Benchmarks — Leaderboards based",
+"type": "google_keep",
+"relationship": "related_resource",
+"subtopic": "Leaderboards",
+"url": "https://keep.google.com/u/0/#NOTE/1rxEC33hc2GyliG_aYp0kbV3XBQkogghJPO0a2rOPX6mIwqt1T_FUuKJfYZxXW2BLFMdi5PUj"
+}
+]
+}
+]
+},
+{
+"id": "fine_tuning_ml",
+"name": "ML and Fine-Tuning",
+"topics": [
+{
+"id": "fine_tuning_hyperparameters",
+"title": "AI Fine-Tuning Hyperparameters",
+"concepts": [
+"Fine-tuning",
+"Hyperparameters",
+"Evaluation",
+"Decision making"
+],
+"resources": [
+{
+"id": "r020",
+"title": "AI Fine Tuning Hyperparameters",
+"type": "google_doc",
+"relationship": "primary_resource",
+"url": "https://docs.google.com/document/d/1qnDYgxm3lb6ZgebKe5OHmeswQTvpTixYl90v191eHUU/edit?usp=sharing"
+}
+]
+},
+{
+"id": "fine_tuning_from_scratch",
+"title": "Fine-Tuning From Scratch",
+"concepts": [
+"Fine-tuning",
+"Data ingestion",
+"Preprocessing"
+],
+"resources": [
+{
+"id": "r021",
+"title": "fine tuning from scratch",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1GXf1mIU8wPa9v01HJFrhjUg1w4_o_ZvbwPBFqyXQzwtryS0wdmiMQzLg8s0qZg"
+}
+]
+},
+{
+"id": "fine_tuning_stepwise",
+"title": "Fine-Tuning Step Wise",
+"concepts": [
+"Fine-tuning workflow",
+"Step-by-step fine-tuning"
+],
+"resources": []
+},
+{
+"id": "ml_finetuning_detailed",
+"title": "ML and Fine-Tuning Detailed",
+"concepts": [
+"Machine learning",
+"Fine-tuning",
+"Detailed ML workflow"
+],
+"resources": [
+{
+"id": "r022",
+"title": "ML AND FINETUNING DETAILED",
+"type": "google_doc",
+"relationship": "primary_resource",
+"url": "https://docs.google.com/document/d/1to2x6rZ_L3lV9P0hgCbZ1yiDrKR0EfodAZaoOkKr9uA/edit?usp=sharing"
+},
+{
+"id": "r022",
+"title": "GDocs",
+"type": "google_doc",
+"relationship": "duplicate_reference",
+"url": "https://docs.google.com/document/d/1to2x6rZ_L3lV9P0hgCbZ1yiDrKR0EfodAZaoOkKr9uA/edit?usp=sharing"
+}
+]
+}
+]
+},
+{
+"id": "enterprise_architecture",
+"name": "Enterprise Architecture",
+"topics": [
+{
+"id": "enterprise_grade_ai_architecture",
+"title": "Enterprise Grade AI Architecture",
+"concepts": [
+"Enterprise architecture",
+"AI architecture",
+"Architecture governance",
+"GSRC",
+"Enterprise architecture pillars"
+],
+"resources": [
+{
+"id": "r012",
+"title": "Enterprise grade AI Architecture",
+"type": "google_doc",
+"relationship": "primary_resource",
+"url": "https://docs.google.com/document/d/1yz7HKul7-55soVxAwN_PxxERtaoTqEwDsM_2yHSLEsc/edit?usp=sharing"
+},
+{
+"id": "r023",
+"title": "Key 4 pillars",
+"type": "external_webpage",
+"relationship": "supporting_resource",
+"url": "https://images.squarespace-cdn.com/content/v1/5a8af3fc51a5840b490d6db8/4a777c37-8bf3-4125-97e8-ff0d846afb61/Holistic+Enterprise+Architecture?format=1000w"
+},
+{
+"id": "r024",
+"title": "GSRC",
+"type": "google_keep",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1W5TCZyfrFU70HZ0L-1oTNywQzcTo3ovB8NXeaDF2z2USzwEHkzfDJKCJ2Ifargw"
+}
+]
+},
+{
+"id": "togaf_blueprint",
+"title": "TOGAF Blueprint and EA Maturity Model",
+"concepts": [
+"TOGAF",
+"Architecture blueprint",
+"EA maturity",
+"Technology and system convergence"
+],
+"resources": [
+{
+"id": "r025",
+"title": "TOGAF Blueprint and EA maturity model",
+"type": "google_doc",
+"relationship": "primary_resource",
+"url": "https://docs.google.com/document/d/1125MmMkpHK5knxKYid_zgecEcRQRTxZOGVvkfajmMTk/edit?usp=sharing"
+},
+{
+"id": "r026",
+"title": "Tech and system convergence",
+"type": "google_keep",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1Atnv4QTp7bjB3AkC4d8AciWJerncfnG8PYNOQqKAyxSiSv88Ya7oHmLmDfBY1YE"
+}
+]
+},
+{
+"id": "value_streams_capability_maps",
+"title": "Value Streams vs Capability Maps",
+"concepts": [
+"Value streams",
+"Capability maps",
+"Business architecture",
+"Business continuity mapping"
+],
+"resources": [
+{
+"id": "r027",
+"title": "VALUE Streams vs capability maps",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/182QuGMfdu-5qNZKC0OEVry0-3YCh5Dy0WuQ8Ji0N9CZuye-kTBBlu_oOnT4kXxc"
+},
+{
+"id": "r028",
+"title": "BCM Mapping",
+"type": "google_keep",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1EuA9K30HKKS8W8SxKDGdyC8TS7YEI0tIKgoxiYrD8nkhtbBIvmYQft0tcGous-zJpN8d9N9l"
+}
+]
+},
+{
+"id": "ea_modeling",
+"title": "EA Modelling — Bizzdesign, SAP, LeanIX",
+"concepts": [
+"Enterprise architecture modelling",
+"Bizzdesign",
+"SAP",
+"LeanIX",
+"EA deliverables",
+"Capability maps",
+"Roadmaps"
+],
+"resources": [
+{
+"id": "r029",
+"title": "EA Modelling bizzdesign SAP LeanIX",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1sY1rB94cEiK32KEi1rFJsihpD4tXHGlyPgUkXkp-If4hxo-fTYhnHT1U9tPxTA"
+}
+]
+},
+{
+"id": "reference_model_metamodel",
+"title": "Reference Model / Metamodel",
+"concepts": [
+"Reference architecture",
+"Metamodel",
+"EA modelling"
+],
+"resources": [
+{
+"id": "r030",
+"title": "Reference model METAMODEL",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1rACbi66n-6UJ9oiZr3xb3EnA-ftfBTL2aK7BObfNdwPmSQlkLlNLCzLS-u52"
+}
+]
+},
+{
+"id": "legacy_modernisation",
+"title": "Legacy Modernisation",
+"concepts": [
+"Legacy modernization",
+"Current-state architecture analysis"
+],
+"resources": [
+{
+"id": "r031",
+"title": "legacy modernisation list",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1jiE95paYLs4bFWRQdopgvzjMQP9tq1bG37TYi3VCp4RKmVgX3FQJ-45W8uiYsA"
+}
+]
+}
+]
+},
+{
+"id": "microservices_design_patterns",
+"name": "Microservices and Design Patterns",
+"topics": [
+{
+"id": "microservice_patterns",
+"title": "Microservice Patterns and Application Design",
+"concepts": [
+"Microservices",
+"Application design",
+"Design patterns",
+"Saga",
+"Bounded Context"
+],
+"resources": [
+{
+"id": "r032",
+"title": "microservice patterns app design",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1OLPU1bkLt6g5_Bh1m6vDP5-ueRg_E5yaSyoGsMwmKUU3_8knKenM13E8biuE8iNDBqg3eUx-"
+},
+{
+"id": "r033",
+"title": "SAGA BAW BPMN WDL",
+"type": "google_keep",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1LSUCJsspOa8AV2Fza-YHSaFuXpPeH5aA8d0jdaO4tAt7E3JSwHGBddXftcbmYlo"
+}
+]
+},
+{
+"id": "microservices_scaling",
+"title": "Microservices Scaling Issues",
+"concepts": [
+"Microservices",
+"Scalability",
+"Scaling problems"
+],
+"resources": [
+{
+"id": "r034",
+"title": "Microservices scaling issues",
+"type": "medium_article",
+"relationship": "primary_resource",
+"url": "/@vanika.awasthi/microservices-scaling-problems-2b7f88faa1b0"
+}
+]
+},
+{
+"id": "design_patterns",
+"title": "Design Patterns",
+"concepts": [
+"Creational patterns",
+"Structural patterns",
+"Behavioral patterns",
+"Software design"
+],
+"resources": [
+{
+"id": "r035",
+"title": "Design patterns",
+"type": "medium_article",
+"relationship": "primary_resource",
+"url": "/@vanika.awasthi/design-patterns-scalability-and-common-problems-of-software-developers-15e617907e23"
+}
+]
+},
+{
+"id": "when_choose_eda",
+"title": "When to Choose EDA",
+"concepts": [
+"Event-driven architecture",
+"EDA",
+"Scalability",
+"EDA scaling problems"
+],
+"resources": [
+{
+"id": "r036",
+"title": "When to Choose EDA",
+"type": "google_doc",
+"relationship": "primary_resource",
+"url": "https://docs.google.com/document/d/1XD8zJnPjvCC42q3z40OBjDnbXnqpbFyzvc4c8mvi9Ig/edit?usp=sharing"
+}
+]
+}
+]
+},
+{
+"id": "api_integration",
+"name": "REST, MCP and OpenAPI",
+"topics": [
+{
+"id": "rest_api",
+"title": "REST API Design",
+"concepts": [
+"REST",
+"API design",
+"REST principles"
+],
+"resources": [
+{
+"id": "r037",
+"title": "Rest API",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1rBSubH_jYkp-WIXC1NC892imh3pMMgVsE4cqdEaxPHWVc-FfINlWYXzKV87FF821qHp_fsj_"
+},
+{
+"id": "r038",
+"title": "Rest Cheatsheet",
+"type": "google_keep",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1B_7GEvCJIz5pSHb-Ch7ZmVDEV8SfHNwfJnSilTpUG-0iiNT5DDsyvcEjRNgb8pI"
+}
+]
+},
+{
+"id": "openapi",
+"title": "OpenAPI Specifications",
+"concepts": [
+"OpenAPI",
+"API specification",
+"API contracts"
+],
+"resources": [
+{
+"id": "r039",
+"title": "OpenAPI Specs",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1j47bfUC4vLbu1eI4kOVs6UFkhaNQLtfQ-MSaGxKpvv7VlacJs3n-go6TcGkDBw"
+}
+]
+}
+]
+},
+{
+"id": "security_identity",
+"name": "Security, IAM and Identity",
+"topics": [
+{
+"id": "enterprise_security",
+"title": "Enterprise Security",
+"concepts": [
+"End-to-end security",
+"IAM",
+"SSO",
+"Federated identity",
+"Identity providers",
+"Okta",
+"Google SSO",
+"Microsoft",
+"Canonical IDP model",
+"SOC 2",
+"SIEM",
+"Logstash"
+],
+"resources": [
+{
+"id": "r040",
+"title": "SECURITY",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1AdIq-YKpWOXfER2JXr89GqqcUlvXg-xfSebqhMQcKV7iZg3nomWUnIt_lKkuGg"
+},
+{
+"id": "r041",
+"title": "enterprise IAM sso federated IDP prupartnership",
+"type": "google_keep",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1ApQJtuE09SnK7BNqPPI9hap46ANDgFCMl6hbTZ4e9JC-fdNm9T9L5lkeF8AI"
+},
+{
+"id": "r042",
+"title": "SOC2 SIEM",
+"type": "google_keep",
+"relationship": "supporting_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1C_zv5AcfODG1AI14bp84Y9Jv9Kya4ggs0wY69H8e9b2N6HunJ5CNICn7Usb9aL4"
+}
+]
+}
+]
+},
+{
+"id": "workflow_orchestration",
+"name": "Workflow Orchestration",
+"topics": [
+{
+"id": "workflow_orchestration_taxonomy",
+"title": "Workflow Orchestration Taxonomy",
+"concepts": [
+"Workflow orchestration",
+"Workflow engines",
+"Orchestration taxonomy"
+],
+"resources": [
+{
+"id": "r043",
+"title": "Workflow orchestration taxonomy",
+"type": "google_doc",
+"relationship": "primary_resource",
+"url": "https://docs.google.com/document/d/1BfiQgm0j64kh9OnI5lgvzIIsURCqD1ElxQ4vzxmVQs4/edit?usp=sharing"
+}
+]
+},
+{
+"id": "saga_bpmn_wdl",
+"title": "Saga, BAW, BPMN and WDL",
+"concepts": [
+"Saga",
+"Business automation workflow",
+"BPMN",
+"Workflow definition language"
+],
+"resources": [
+{
+"id": "r033",
+"title": "SAGA BAW BPMN WDL",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1LSUCJsspOa8AV2Fza-YHSaFuXpPeH5aA8d0jdaO4tAt7E3JSwHGBddXftcbmYlo"
+}
+]
+}
+]
+},
+{
+"id": "software_architecture_foundations",
+"name": "Software Architecture Foundations",
+"topics": [
+{
+"id": "track_code_flow_to_db",
+"title": "Track Code Flow to DB",
+"concepts": [
+"Code flow",
+"Application flow",
+"Database interaction",
+"Code-to-database tracing"
+],
+"resources": [
+{
+"id": "r044",
+"title": "Track code flow to db",
+"type": "medium_article",
+"relationship": "primary_resource",
+"url": "/@vanika.awasthi/track-node-java-code-flow-to-db-dea22417a266"
+}
+]
+},
+{
+"id": "layers_of_architecture",
+"title": "Layers of Architecture",
+"concepts": [
+"Architecture layers",
+"Layered architecture"
+],
+"resources": [
+{
+"id": "r045",
+"title": "Layers of architecture",
+"type": "medium_article",
+"relationship": "primary_resource",
+"url": "/@vanika.awasthi/layers-of-architecture-a2b1098b91b3"
+}
+]
+},
+{
+"id": "solid",
+"title": "SOLID Design Principles",
+"concepts": [
+"SOLID",
+"Object-oriented design",
+"Software design principles"
+],
+"resources": [
+{
+"id": "r046",
+"title": "SOLID Design Principles",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1wQJFEC1eZBBYPg__aX0xiQMRcsd0gsd6-XgYx81SvA3aRAACT3L8nLPS5E5ppwa1o_6u"
+}
+]
+}
+]
+},
+{
+"id": "resilience_disaster_recovery",
+"name": "Resilience, Disaster Recovery and Business Continuity",
+"topics": [
+{
+"id": "rto_rpo_itdr_bia",
+"title": "RTO, RPO, ITDR and BIA",
+"concepts": [
+"RTO",
+"RPO",
+"IT disaster recovery",
+"BIA",
+"Resiliency architecture",
+"Disaster recovery"
+],
+"resources": [
+{
+"id": "r047",
+"title": "RTO RPO ITDR BIA",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1KMgQ2jQewg0UZMhvE_S7gu9YynHA1leeRMPEZ-8tIJCm9R3kCp8iDaQSHtOY1mBqAqP8h-37"
+}
+]
+},
+{
+"id": "bcm_mapping",
+"title": "BCM Mapping",
+"concepts": [
+"Business continuity management",
+"Business capability mapping"
+],
+"resources": [
+{
+"id": "r028",
+"title": "BCM Mapping",
+"type": "google_keep",
+"relationship": "primary_resource",
+"url": "https://keep.google.com/u/0/#NOTE/1EuA9K30HKKS8W8SxKDGdyC8TS7YEI0tIKgoxiYrD8nkhtbBIvmYQft0tcGous-zJpN8d9N9l"
+}
+]
+}
+]
+},
+{
+"id": "sap_erp",
+"name": "SAP ERP and Enterprise User Experience",
+"topics": [
+{
+"id": "sap_erp_ea_user_journey",
+"title": "SAP ERP EA-Grade User Journey and Personas",
+"concepts": [
+"SAP ERP",
+"Enterprise architecture",
+"User journeys",
+"Personas",
+"EA-grade UX"
+],
+"resources": [
+{
+"id": "r048",
+"title": "SAP ERP EA Grade User journey Personas",
+"type": "google_doc",
+"relationship": "primary_resource",
+"url": "https://docs.google.com/document/d/1VhRo0RhIvzVRUAEt0B0tp4vjf4WqNyiRptzGX8uwmg8/edit?usp=sharing"
+}
+]
+}
+]
+},
+{
+"id": "project_management",
+"name": "Project Management",
+"topics": [
+{
+"id": "project_management_guide",
+"title": "Project Management Guide",
+"concepts": [
+"Project management",
+"Project delivery"
+],
+"resources": [
+{
+"id": "r049",
+"title": "Project management guide",
+"type": "medium_article",
+"relationship": "primary_resource",
+"url": "/@vanika.awasthi/project-manag-7502cacfba07"
+}
+]
+}
+]
+}
+],
+"cross_references": [
+{
+"resource_id": "r004",
+"related_resource_ids": [
+"r005",
+"r006"
+],
+"relationship": "scratch_design_supporting_material"
+},
+{
+"resource_id": "r012",
+"related_resource_ids": [
+"r013",
+"r014"
+],
+"relationship": "ai_architecture_resources"
+},
+{
+"resource_id": "r015",
+"related_resource_ids": [
+"r014"
+],
+"relationship": "rag_vector_search"
+},
+{
+"resource_id": "r018",
+"related_resource_ids": [
+"r019"
+],
+"relationship": "llm_evaluation_and_benchmarking"
+},
+{
+"resource_id": "r032",
+"related_resource_ids": [
+"r033"
+],
+"relationship": "microservice_workflow_patterns"
+},
+{
+"resource_id": "r027",
+"related_resource_ids": [
+"r028"
+],
+"relationship": "business_architecture_and_bcm"
+},
+{
+"resource_id": "r040",
+"related_resource_ids": [
+"r041",
+"r042"
+],
+"relationship": "enterprise_security_stack"
+}
+],
+"source_links": {
+"author_profile": {
+"type": "medium_profile",
+"url": "/@vanika.awasthi"
+},
+"introduction": {
+"type": "medium_article",
+"url": "/@vanika.awasthi/introduction-10f722351edf"
+},
+"glossary": {
+"type": "medium_article",
+"url": "/@vanika.awasthi/glossary-abe422d605de"
+}
+},
+"unlinked_or_linkless_topics": [
+{
+"title": "EA",
+"category": "enterprise_architecture",
+"resources": []
+},
+{
+"title": "REST/MCP/OPENAPI",
+"category": "api_integration",
+"resources": []
+},
+{
+"title": "MICROSERVICES AND DESIGN PATTERNS",
+"category": "microservices_design_patterns",
+"resources": []
+},
+{
+"title": "FINE TUNING Step wise",
+"category": "fine_tuning_ml",
+"resources": []
+}
+],
+"resource_catalog": [
+{
+"id": "r001",
+"title": "KPI LIST",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1-Lny9mswoO3sn7qiZ41jZHchCdmsdTVlX7SYoLlVp39zBtXAxuEhsVquPfajLftEuBh5AaqM"
+},
+{
+"id": "r002",
+"title": "How would you design Architecture?",
+"type": "google_doc",
+"url": "https://docs.google.com/document/d/1l12T83EiGYoGyxSLqJE3E2StyGyjUfkwMo-GAfQgrOo/edit?usp=sharing"
+},
+{
+"id": "r003",
+"title": "FOUNDATION Arch concepts",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1J-PGXbAMyHw0_0Pfwc4ZtJww2W5oMsBoa1Mcct3NuVdXf0kfVokuOFfEx4I13Fw"
+},
+{
+"id": "r004",
+"title": "Scratch design",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1okpf1-C6JpQW-jGhCKZewoqeb8_n9zLjnTCBM2x8albDQuYuNqrzMj4sY8dBYRu9QO_1"
+},
+{
+"id": "r005",
+"title": "key pillar",
+"type": "google_keep_media",
+"url": "https://keep.google.com/u/0/media/v2/1okpf1-C6JpQW-jGhCKZewoqeb8_n9zLjnTCBM2x8albDQuYuNqrzMj4sY8dBYRu9QO_1/1V20u1Q8XZl6-hkwJkZvzFMDUIrWkfpa6Y0Wn0gAHA9x8an8rapbwX7ci8WmT4cg?accept=image%2Fgif%2Cimage%2Fjpeg%2Cimage%2Fjpg%2Cimage%2Fpng%2Caudio%2Faac&sz=727&auditContext=forDisplay"
+},
+{
+"id": "r006",
+"title": "best practice",
+"type": "image",
+"url": "https://lh3.googleusercontent.com/keep-bbsk/AFgXFlKzVa_nhKy4WerelMaQgfaUnSIJZgQ7emIkeBCRmM4SGc6bdJQ1WVUFnJbWiZ_7d8DOxU0jzxFMqPVc1OFuWuxZoSGijJBftLFDglGynqKxbk9JQUyOqw=s727"
+},
+{
+"id": "r007",
+"title": "DDD Canonical Data model Aggregates root value control objects",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1VkJ8q0pf8Sd0Ekr8xd5sPRstqqRAcVHhGGH7MJ_dMUTyxe5PH8DAd899x2D-xQ"
+},
+{
+"id": "r008",
+"title": "short quick dedicated topic keep",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1YbaUzKpHamJMDg-TakrtdFiHCBuBO-DqIEcZXLLWGRTCcnsCvPxNiJtgG9wly_E"
+},
+{
+"id": "r009",
+"title": "When did architect END TO END",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1T_G1aTQMdtlQRIl_hnPj4MACwMYgDQ577YCyHmei5unsOhw_BcU3ir5SRR9VuT0"
+},
+{
+"id": "r010",
+"title": "Tech lead DSA — Algo Exp",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1cTL8IcZYqtZyRPOO2E3JPsp8k2hCfmg9-T-7T24kr0LUxhou-JAfXr5PTv7yaeb_x9jT"
+},
+{
+"id": "r011",
+"title": "DSA patterns and solutions",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1xIbJE76p5RTcCopuF_oC1lnvKEtFqn-DvZ0pO2NSg7fSwvlivhpu-gnwXk_xDsJgysCWfLjx"
+},
+{
+"id": "r012",
+"title": "AI architecture design / Enterprise grade AI Architecture",
+"type": "google_doc",
+"url": "https://docs.google.com/document/d/1yz7HKul7-55soVxAwN_PxxERtaoTqEwDsM_2yHSLEsc/edit?usp=sharing"
+},
+{
+"id": "r013",
+"title": "AI NFR",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1RhpLo2ASceT0MZEF6i1xSwyRx4US3cqg_QYmgT-Vzlc1z_J4XPw4aLJL6M7Yz3tIozqV2KZC"
+},
+{
+"id": "r014",
+"title": "Index IVF RAG benchmark",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/17BeKTOR4i084WZIFReSm2e-RRge5tIxlpuyIwaFTFf6pbdoBNVB4XvGet9BiocWAP-dDkh0q"
+},
+{
+"id": "r015",
+"title": "RAG IVF BM25",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1gzxNCi3CrRyWJ9M6l6M3MBcY6BKuQJnoYkGgafqBMNQSwfxVJ6LmoIdCIQPHb1s"
+},
+{
+"id": "r016",
+"title": "Industry use case Hospital Insurance benchmark algo evals",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1Hy-XVeuKJkUzGGFoymtz9-ntTZh78itZtgtkxIJzcVWhParMoiyZ6GowuZbPil6eK2aLxYNR"
+},
+{
+"id": "r017",
+"title": "AI overlap chunking",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/15T_7woEuOKalc3ch0Q1hab52L6rGPxz684SAcc-M74Dr-m9MAqqPsPBGbEAT"
+},
+{
+"id": "r018",
+"title": "LLM Evaluation Metrics",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1V32RNZ9_J8bCd7-4SyRZd7v8KoBF2PoZUPgXB8RQ43E8NRjXP08ELKcpwQWIays"
+},
+{
+"id": "r019",
+"title": "LLM Model Benchmarks",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1rxEC33hc2GyliG_aYp0kbV3XBQkogghJPO0a2rOPX6mIwqt1T_FUuKJfYZxXW2BLFMdi5PUj"
+},
+{
+"id": "r020",
+"title": "AI Fine Tuning Hyperparameters",
+"type": "google_doc",
+"url": "https://docs.google.com/document/d/1qnDYgxm3lb6ZgebKe5OHmeswQTvpTixYl90v191eHUU/edit?usp=sharing"
+},
+{
+"id": "r021",
+"title": "fine tuning from scratch",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1GXf1mIU8wPa9v01HJFrhjUg1w4_o_ZvbwPBFqyXQzwtryS0wdmiMQzLg8s0qZg"
+},
+{
+"id": "r022",
+"title": "ML AND FINETUNING DETAILED",
+"type": "google_doc",
+"url": "https://docs.google.com/document/d/1to2x6rZ_L3lV9P0hgCbZ1yiDrKR0EfodAZaoOkKr9uA/edit?usp=sharing"
+},
+{
+"id": "r023",
+"title": "Key 4 pillars",
+"type": "external_webpage",
+"url": "https://images.squarespace-cdn.com/content/v1/5a8af3fc51a5840b490d6db8/4a777c37-8bf3-4125-97e8-ff0d846afb61/Holistic+Enterprise+Architecture?format=1000w"
+},
+{
+"id": "r024",
+"title": "GSRC",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1W5TCZyfrFU70HZ0L-1oTNywQzcTo3ovB8NXeaDF2z2USzwEHkzfDJKCJ2Ifargw"
+},
+{
+"id": "r025",
+"title": "TOGAF Blueprint and EA maturity model",
+"type": "google_doc",
+"url": "https://docs.google.com/document/d/1125MmMkpHK5knxKYid_zgecEcRQRTxZOGVvkfajmMTk/edit?usp=sharing"
+},
+{
+"id": "r026",
+"title": "Tech and system convergence",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1Atnv4QTp7bjB3AkC4d8AciWJerncfnG8PYNOQqKAyxSiSv88Ya7oHmLmDfBY1YE"
+},
+{
+"id": "r027",
+"title": "VALUE Streams vs capability maps",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/182QuGMfdu-5qNZKC0OEVry0-3YCh5Dy0WuQ8Ji0N9CZuye-kTBBlu_oOnT4kXxc"
+},
+{
+"id": "r028",
+"title": "BCM Mapping",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1EuA9K30HKKS8W8SxKDGdyC8TS7YEI0tIKgoxiYrD8nkhtbBIvmYQft0tcGous-zJpN8d9N9l"
+},
+{
+"id": "r029",
+"title": "EA Modelling bizzdesign SAP LeanIX",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1sY1rB94cEiK32KEi1rFJsihpD4tXHGlyPgUkXkp-If4hxo-fTYhnHT1U9tPxTA"
+},
+{
+"id": "r030",
+"title": "Reference model METAMODEL",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1rACbi66n-6UJ9oiZr3xb3EnA-ftfBTL2aK7BObfNdwPmSQlkLlNLCzLS-u52"
+},
+{
+"id": "r031",
+"title": "legacy modernisation list",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1jiE95paYLs4bFWRQdopgvzjMQP9tq1bG37TYi3VCp4RKmVgX3FQJ-45W8uiYsA"
+},
+{
+"id": "r032",
+"title": "microservice patterns app design",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1OLPU1bkLt6g5_Bh1m6vDP5-ueRg_E5yaSyoGsMwmKUU3_8knKenM13E8biuE8iNDBqg3eUx-"
+},
+{
+"id": "r033",
+"title": "SAGA BAW BPMN WDL",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1LSUCJsspOa8AV2Fza-YHSaFuXpPeH5aA8d0jdaO4tAt7E3JSwHGBddXftcbmYlo"
+},
+{
+"id": "r034",
+"title": "Microservices scaling issues",
+"type": "medium_article",
+"url": "/@vanika.awasthi/microservices-scaling-problems-2b7f88faa1b0"
+},
+{
+"id": "r035",
+"title": "Design patterns",
+"type": "medium_article",
+"url": "/@vanika.awasthi/design-patterns-scalability-and-common-problems-of-software-developers-15e617907e23"
+},
+{
+"id": "r036",
+"title": "When to Choose EDA",
+"type": "google_doc",
+"url": "https://docs.google.com/document/d/1XD8zJnPjvCC42q3z40OBjDnbXnqpbFyzvc4c8mvi9Ig/edit?usp=sharing"
+},
+{
+"id": "r037",
+"title": "Rest API",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1rBSubH_jYkp-WIXC1NC892imh3pMMgVsE4cqdEaxPHWVc-FfINlWYXzKV87FF821qHp_fsj_"
+},
+{
+"id": "r038",
+"title": "Rest Cheatsheet",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1B_7GEvCJIz5pSHb-Ch7ZmVDEV8SfHNwfJnSilTpUG-0iiNT5DDsyvcEjRNgb8pI"
+},
+{
+"id": "r039",
+"title": "OpenAPI Specs",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1j47bfUC4vLbu1eI4kOVs6UFkhaNQLtfQ-MSaGxKpvv7VlacJs3n-go6TcGkDBw"
+},
+{
+"id": "r040",
+"title": "SECURITY",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1AdIq-YKpWOXfER2JXr89GqqcUlvXg-xfSebqhMQcKV7iZg3nomWUnIt_lKkuGg"
+},
+{
+"id": "r041",
+"title": "enterprise IAM sso federated IDP prupartnership",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1ApQJtuE09SnK7BNqPPI9hap46ANDgFCMl6hbTZ4e9JC-fdNm9T9L5lkeF8AI"
+},
+{
+"id": "r042",
+"title": "SOC2 SIEM",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1C_zv5AcfODG1AI14bp84Y9Jv9Kya4ggs0wY69H8e9b2N6HunJ5CNICn7Usb9aL4"
+},
+{
+"id": "r043",
+"title": "Workflow orchestration taxonomy",
+"type": "google_doc",
+"url": "https://docs.google.com/document/d/1BfiQgm0j64kh9OnI5lgvzIIsURCqD1ElxQ4vzxmVQs4/edit?usp=sharing"
+},
+{
+"id": "r044",
+"title": "Track code flow to db",
+"type": "medium_article",
+"url": "/@vanika.awasthi/track-node-java-code-flow-to-db-dea22417a266"
+},
+{
+"id": "r045",
+"title": "Layers of architecture",
+"type": "medium_article",
+"url": "/@vanika.awasthi/layers-of-architecture-a2b1098b91b3"
+},
+{
+"id": "r046",
+"title": "SOLID Design Principles",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1wQJFEC1eZBBYPg__aX0xiQMRcsd0gsd6-XgYx81SvA3aRAACT3L8nLPS5E5ppwa1o_6u"
+},
+{
+"id": "r047",
+"title": "RTO RPO ITDR BIA",
+"type": "google_keep",
+"url": "https://keep.google.com/u/0/#NOTE/1KMgQ2jQewg0UZMhvE_S7gu9YynHA1leeRMPEZ-8tIJCm9R3kCp8iDaQSHtOY1mBqAqP8h-37"
+},
+{
+"id": "r048",
+"title": "SAP ERP EA Grade User journey Personas",
+"type": "google_doc",
+"url": "https://docs.google.com/document/d/1VhRo0RhIvzVRUAEt0B0tp4vjf4WqNyiRptzGX8uwmg8/edit?usp=sharing"
+},
+{
+"id": "r049",
+"title": "Project management guide",
+"type": "medium_article",
+"url": "/@vanika.awasthi/project-manag-7502cacfba07"
+}
+]
+}

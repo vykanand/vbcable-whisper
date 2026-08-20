@@ -5,9 +5,11 @@ A real-time, ultra-fast, two-way speech-to-text transcription tool for computer 
 ## Features
 
 - **Dual-channel interception**: Captures microphone input and system audio simultaneously via multi-threading
-- **Local transcription**: Uses `faster-whisper` (base model) with CPU-only, no internet required
+- **Local transcription**: Uses `faster-whisper` (small model) with CPU-only, no internet required
 - **Real-time VAD**: Voice Activity Detection with rolling buffer for near-zero latency
 - **Formatted output**: Timestamped, source-identified transcriptions in terminal and markdown
+- **Web dashboard**: Live transcription streaming with SSE/WebSockets
+- **Topic matching**: Automatic matching of SYS-side speech to topics.json with clickable links
 
 ## Requirements
 
@@ -80,6 +82,44 @@ On Windows, simply double-click `run.bat` to:
 > silently routed into the cable. That is expected — the app captures it as SYS,
 > and "Listen to this device" lets you hear it too.
 
+## Web Dashboard
+
+For a live web interface with topic matching, run:
+
+```powershell
+.\server.bat            # Windows batch
+# or
+python server.py        # Direct Python
+```
+
+Then open http://localhost:8080 in your browser.
+
+### Features
+
+- **Live transcriptions**: See MIC and SYS speech as it happens
+- **Color-coded**: MIC in blue, SYS in green, matched topics in orange
+- **Topic matching**: When SYS speech matches topics in `topics.json`, clickable links appear
+
+## Topic Matching
+
+The system matches spoken words from SYS (system audio) against `topics.json` to provide:
+- Real-time topic identification
+- Clickable links to resources (Google Keep, Google Docs, Medium articles, etc.)
+
+### How it works
+
+1. `topics.json` contains structured topics with keywords and resource URLs
+2. When SYS speech is transcribed, keywords are matched against the topic index
+3. Matched topics are displayed in the web dashboard with links
+
+### Example
+
+If someone says: *"How would you design Architecture for microservices?"*
+
+The system matches "Architecture", "microservices", "design" and displays:
+- **"How would you design Architecture?" →** https://docs.google.com/document/...
+- **"Microservice Patterns and Application Design" →** https://keep.google.com/...
+
 ## Docker (Linux/macOS)
 
 ```bash
@@ -94,6 +134,11 @@ docker run --rm -it -v "$(pwd)/transcripts:/app/transcripts" call-transcriber
 **Windows Batch Script (Recommended)**
 ```powershell
 .\run.bat
+```
+
+**Web Server**
+```bash
+python server.py
 ```
 
 **Direct Python**
@@ -111,12 +156,12 @@ docker run --rm -it -v "$(pwd)/transcripts:/app/transcripts" call-transcriber
 
 When prompted, enter the device indices shown in the device list:
 ```
-[0] Microsoft Sound Mapper - Input | Input channels: 2 | Output channels: 0
-[1] Microphone Array (Intel) | Input channels: 4 | Output channels: 0
-[2] Speakers (Realtek) | Input channels: 0 | Output channels: 8
+[0] Microsoft Sound Mapper - Input | Input: 2 | Output: 0
+[1] Microphone (USB ENC Audio Devic | Input: 4 | Output: 0 | Host: 0
+[2] CABLE Output (VB-Audio Virtual  | Input: 16 | Output: 0 | Host: 0
 
 Enter the index ID for your Microphone: 1
-Enter the index ID for your Speaker/Loopback device: 0
+Enter the index ID for your Speaker/Loopback device: 2
 ```
 
 ### Step 3: Monitor Output
@@ -127,6 +172,8 @@ Live transcriptions appear in the terminal:
 [14:30:28] [SYS]: "I'm doing well, thanks for asking."
 ```
 
+Or view them in the web dashboard at http://localhost:8080
+
 ### Step 4: Stop & Save
 
 Press `Ctrl+C` to stop. All transcriptions are saved to `call_transcript_YYYYMMDD_HHMMSS.md` in the current directory.
@@ -136,6 +183,7 @@ Press `Ctrl+C` to stop. All transcriptions are saved to `call_transcript_YYYYMMD
 ```
 [HH:MM:SS] [MIC]: "Your spoken words here..."
 [HH:MM:SS] [SYS]: "Incoming call audio words here..."
+[HH:MM:SS] [MATCH] Resource Title -> https://...
 ```
 
 ## Transcript File
@@ -149,28 +197,34 @@ All transcriptions are appended to `call_transcript_[TIMESTAMP].md`:
 [14:30:28] [SYS]: "I'm doing well, thanks for asking."
 ```
 
+## Files
+
+- `main.py` — Core transcription library
+- `server.py` — Web server with live streaming
+- `run.bat` — Windows batch launcher
+- `server.bat` — Windows batch for web server
+- `Dockerfile` — Docker build for Linux/macOS
+- `topics.json` — Topic index for matching
+- `requirements.txt` — Python dependencies
+- `setup_vb_cable.ps1` — VB-Audio setup script
+- `test_loopback.py` — Loopback verification script
+
 ## Architecture
 
 - **Audio Capture**: Two daemon threads read from PyAudio streams (MIC + SYS)
 - **Queue**: Thread-safe queues pass audio chunks to transcription workers
 - **VAD**: Simple RMS energy-based Voice Activity Detection
-- **Transcription**: `faster-whisper/base` model runs locally on CPU with int8 quantization
+- **Transcription**: `faster-whisper/small` model runs locally on CPU with int8 quantization
+- **WS Server**: HTTP server with SSE endpoint for live streaming to web
 
 ## Configuration
 
-The following constants in `main.py` can be adjusted:
+The following constants can be adjusted:
 
-- `ENERGY_THRESHOLD`: VAD sensitivity (higher = less sensitive)
+- `ENERGY_THRESHOLD`: VAD sensitivity (higher = less sensitive, default 50)
 - `CHUNK_SIZE`: Audio frames per buffer (default 1024)
 - `RATE`: Audio sample rate (default 16000 Hz)
-- Model size: Change `"base"` to `"small"` or `"tiny"` in `WhisperModel()` call
-
-## Termination
-
-Press `Ctrl+C` to stop transcription. The application will:
-- Safely close all audio streams
-- Flush pending transcriptions
-- Save the markdown file
+- Model size: Change `"small"` to `"tiny"`, `"base"`, or `"medium"` in code
 
 ## Troubleshooting
 
@@ -180,4 +234,6 @@ Press `Ctrl+C` to stop transcription. The application will:
 
 **Silent transcriptions**: Adjust `ENERGY_THRESHOLD` in the code or check microphone/system audio levels.
 
-**High CPU usage**: Use a smaller model (`tiny`) or larger chunk size for less frequent transcription calls.
+**High CPU usage**: Use a smaller model (`tiny`) or increase silence threshold for longer segments before flushing.
+
+**Topic matching not working**: Check `topics.json` structure and ensure SYS is capturing system audio (CABLE Output).
