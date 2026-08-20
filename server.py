@@ -205,6 +205,7 @@ h1{color:#333;margin-bottom:20px}
 .mic{color:#2196F3}
 .sys{color:#4CAF50;font-weight:bold}
 .match{color:#FF9800;font-size:13px}
+.match a{color:#FF9800;text-decoration:underline;cursor:pointer}
 .log{color:#999;font-size:12px}
 </style></head>
 <body><div class="container">
@@ -223,7 +224,19 @@ es.onmessage=function(e){
   d.className='line';
   if(e.data.includes('[MIC]'))d.classList.add('mic');
   else if(e.data.includes('[SYS]'))d.classList.add('sys');
-  else if(e.data.includes('[MATCH]'))d.classList.add('match');
+  else if(e.data.includes('[MATCH]')){
+    d.classList.add('match');
+    const i=e.data.lastIndexOf('->');
+    const a=document.createElement('a');
+    a.href=(i>=0?e.data.slice(i+2).trim():'#');
+    a.target='_blank';
+    a.rel='noopener';
+    a.textContent=e.data;
+    d.appendChild(a);
+    t.appendChild(d);
+    t.scrollTop=t.scrollHeight;
+    return;
+  }
   d.textContent=e.data;
   t.appendChild(d);
   t.scrollTop=t.scrollHeight;
