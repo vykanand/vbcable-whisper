@@ -72,11 +72,12 @@ def topic_match(text):
 def send_line(line):
     if not line:
         return
+    global ws_clients
     with ws_lock:
         dead = set()
         for c in list(ws_clients):
             try:
-                c.send(line.encode() + b'\n')
+                c.send(f'data: {line}\n\n'.encode())
             except:
                 dead.add(c)
         ws_clients -= dead
@@ -203,16 +204,10 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'text/event-stream')
             self.send_header('Cache-Control', 'no-cache')
             self.send_header('Connection', 'keep-alive')
-            headers = []
-            for k, v in self._headers_buffer:
-                headers.append(f'{k}: {v}\r\n'.encode())
-            self.wfile.write(b'\r\n')
-            self.wfile.flush()
-            
+            self.end_headers()
             ws_lock.acquire()
             ws_clients.add(self)
             ws_lock.release()
-            
             try:
                 while not stop_event.is_set():
                     time.sleep(1)
