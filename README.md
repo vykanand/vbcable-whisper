@@ -92,7 +92,7 @@ For a live web interface with topic matching, run:
 python server.py        # Direct Python
 ```
 
-Then open http://localhost:8080 in your browser.
+Then open http://localhost:9000 in your browser.
 
 ### Features
 
@@ -172,7 +172,7 @@ Live transcriptions appear in the terminal:
 [14:30:28] [SYS]: "I'm doing well, thanks for asking."
 ```
 
-Or view them in the web dashboard at http://localhost:8080
+Or view them in the web dashboard at http://localhost:9000
 
 ### Step 4: Stop & Save
 

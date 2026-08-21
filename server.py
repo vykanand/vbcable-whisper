@@ -36,6 +36,7 @@ transcript_queue = queue.Queue()
 ENERGY_THRESHOLD = 50
 CHUNK_SIZE = 1024
 RATE = 16000
+PORT = 9000
 
 model = None
 topic_index = None
@@ -44,10 +45,9 @@ topic_index = None
 keep_index = None          # data/index.json  {chunks, stats}
 keep_catalogue = []        # data/catalogue.json
 KEEP_DIR = os.environ.get('KEEP_DIR', 'keep-inbox')
-KEEP_NOTE_BASE = 'http://localhost:8080/note/'
-NOTE_CACHE_SECONDS = 30
-note_cache = {}            # note_id -> last emitted time
-url_cache = {}             # url -> last emitted time
+KEEP_NOTE_BASE = f'http://localhost:{PORT}/note/'
+_last_notes_sig = None     # previous [NOTES]/[KEEP-AI] block signature (anti-spam)
+_last_urls_sig = None      # previous [MEDIUM ARTICLES] block signature (anti-spam)
 _k1 = 1.5
 _b = 0.75
 KEEP_STOPWORDS = set(('a an and are as at be been being but by can could did do does for from had has have how i if in into is it its may might must nor not of on or should so that the their them then there these they this those to was we were what when which who will with would you your most such than too very just also').split(' '))
@@ -250,54 +250,48 @@ def load_keep_data():
     logger.info(f"KeepAI data loaded: {cnt} chunks, {len(keep_catalogue)} notes ({KEEP_DIR})")
 
 def emit_keep_notes(source, ts, txt):
-    """Emit Relevant Notes + KEEP-AI matching topics/links (keep-ai retrieval)."""
+    """Emit only the top-2 relevant notes (URL folded into the line). A block is
+    skipped only when identical to the immediately previous block (anti-spam)."""
+    global _last_notes_sig
     if not keep_index:
         return
     try:
-        rel = keep_related_results(txt, 5)
+        rel = keep_related_results(txt, 2)
     except Exception as e:
         logger.error(f"KeepAI match error: {e}")
         return
-    now = time.time()
-    fresh = []
-    for r in rel:
-        last = note_cache.get(r['id'], 0)
-        if now - last >= NOTE_CACHE_SECONDS:
-            note_cache[r['id']] = now
-            fresh.append(r)
-    if not fresh:
+    if not rel:
         return
+    sig = tuple(r['id'] for r in rel)
+    if sig == _last_notes_sig:
+        return
+    _last_notes_sig = sig
     push_transcript(f'[{ts}] [NOTES] Relevant Notes (keep-ai):')
-    q_words = [w for w in re.split(r'[^a-z0-9]+', (txt or '').lower()) if len(w) > 2]
-    for r in fresh:
+    for r in rel:
         title = (r.get('title') or '').replace('\r', ' ').replace('\n', ' ')
-        push_transcript(f'[{ts}] [NOTES] {title} (score {r["score"]})')
-        title_l = title.lower()
-        mw = [w for w in q_words if w in title_l]
-        words = ', '.join(mw) if mw else title[:30]
-        push_transcript(f'[{ts}] [KEEP-AI-W] {words} -> {KEEP_NOTE_BASE}{r["id"]}')
+        push_transcript(f'[{ts}] [NOTES] {title} (score {r["score"]}) -> {KEEP_NOTE_BASE}{r["id"]}')
     push_transcript(f'[{ts}] [KEEP-AI] matching topics & links:')
-    for r in fresh:
+    for r in rel:
         title = (r.get('title') or '').replace('\r', ' ').replace('\n', ' ')
         push_transcript(f'[{ts}] [KEEP-AI] {title} -> {KEEP_NOTE_BASE}{r["id"]}')
 
 def emit_topic_words(ts, txt):
+    global _last_urls_sig
     matches = topic_word_matches(txt)
     if not matches:
         return
-    now = time.time()
     out = []
     seen = set()
     for m in matches:
-        key = m['url']
-        if now - url_cache.get(key, 0) >= NOTE_CACHE_SECONDS:
-            url_cache[key] = now
+        if m['url'] not in seen:
+            seen.add(m['url'])
             out.append(m)
-            seen.add(key)
-    if not out:
+    sig = tuple(m['url'] for m in out[:2])
+    if sig == _last_urls_sig:
         return
+    _last_urls_sig = sig
     push_transcript(f'[{ts}] [MEDIUM ARTICLES] matching words & links:')
-    for m in out[:8]:
+    for m in out[:2]:
         push_transcript(f'[{ts}] [MEDIUM ARTICLES] {m["word"]} -> {m["url"]}')
 
 def after_transcribe(source, ts, txt):
@@ -326,23 +320,79 @@ def push_transcript(line):
                 dead.add(c)
         ws_clients -= dead
 
-def audio_capture(stream, q):
-    logger.info("Audio capture thread started")
+def audio_capture(stream, q, label='AUDIO', cands=None, pa=None):
+    """Self-healing capture: polls read-availability instead of blocking forever.
+    If a (device, rate) candidate delivers nothing for 6s, cycles to the next
+    candidate (other input devices / rates) until one produces audio."""
+    if not cands:
+        cands = [(None, RATE)]
+    logger.info(f"Audio capture thread started ({label}, {len(cands)} candidate(s))")
+    ci = 0
+    cur = stream
+    last_chunk = time.time()
+
+    def dname(idx):
+        try:
+            return (pa.get_device_info_by_index(idx).get('name') or '?')[:42]
+        except Exception:
+            return '?'
+
     while not stop_event.is_set():
         try:
-            data = stream.read(CHUNK_SIZE, exception_on_overflow=False)
+            avail = cur.get_read_available()
+        except Exception:
+            avail = CHUNK_SIZE  # availability unsupported -> plain blocking read
+        if avail is not None and avail < CHUNK_SIZE:
+            if time.time() - last_chunk > 6.0 and pa is not None and cands[ci][0] is not None:
+                dev_i, rate_i = cands[ci]
+                logger.warning(f"[{label}] no audio for 6s from dev {dev_i} ({dname(dev_i)}) @ {rate_i} Hz - switching")
+                try:
+                    cur.stop_stream()
+                    cur.close()
+                except Exception:
+                    pass
+                ci = (ci + 1) % len(cands)
+                nd, nr = cands[ci]
+                try:
+                    cur = pa.open(format=pyaudio.paInt16, channels=1, rate=nr,
+                                  input=True, input_device_index=nd,
+                                  frames_per_buffer=CHUNK_SIZE)
+                    if not cur.is_active():
+                        cur.start_stream()
+                    last_chunk = time.time()
+                    logger.info(f"[{label}] now capturing dev {nd} ({dname(nd)}) @ {nr} Hz")
+                except Exception as e:
+                    logger.error(f"[{label}] reopen failed (dev {nd}): {e}")
+                    last_chunk = time.time()
+                    time.sleep(1)
+                continue
+            time.sleep(0.005)
+            continue
+        try:
+            data = cur.read(CHUNK_SIZE, exception_on_overflow=False)
             samples = struct.unpack(f"{len(data)//2}h", data)
+            eff = cands[ci][1]
+            if eff != RATE and samples:
+                n_in = len(samples)
+                x = np.asarray(samples, dtype=np.float32)
+                n_out = int(round(n_in * RATE / eff))
+                samples = tuple(np.interp(
+                    np.linspace(0.0, n_in - 1.0, n_out, dtype=np.float32),
+                    np.arange(n_in, dtype=np.float32), x).astype(np.int16).tolist())
             q.put_nowait(samples)
+            last_chunk = time.time()
         except Exception as e:
             if not stop_event.is_set():
-                logger.error(f"Audio capture error: {e}")
+                logger.error(f"Audio capture error ({label}): {e}")
+            break
+        time.sleep(0)
 
 def audio_process(model_ref, source, q):
     logger.info(f"Audio process started for {source}")
     buffer = []
     speech_active = False
     silence_counter = 0
-    
+    _logged_first = False
     SILENCE_THRESHOLD = 32
     MIN_BUFFER_SAMPLES = 4800
     MAX_BUFFER_SAMPLES = 48000
@@ -367,6 +417,10 @@ def audio_process(model_ref, source, q):
             continue
         
         chunk_rms = float(np.sqrt(np.mean(np.array(chunk, dtype=np.float32) ** 2))) if chunk else 0.0
+        
+        if not _logged_first:
+            _logged_first = True
+            logger.info(f"[{source}] first chunk ok: samples={len(chunk)} rms={chunk_rms:.1f} qsize={q.qsize()}")
         
         bar = "#" * int(min(chunk_rms / 50.0, 1.0) * 30)
         print(f"\r[{source}] RMS={chunk_rms:6.1f} |{bar:<30}|", end="", flush=True)
@@ -429,54 +483,76 @@ h1{color:#333;margin-bottom:20px}
 .notes{color:#2196F3;font-size:13px}
 .match,.topics{color:#FF9800;font-size:13px}
 .keepai,.keepaiw{color:#4CAF50;font-size:13px;font-weight:bold}
-.log{color:#999;font-size:12px}
-.sechead{color:#333;font-weight:bold;font-size:13px;padding-top:4px}
- </style></head>
+ .log{color:#999;font-size:12px}
+ .sechead{color:#333;font-weight:bold;font-size:13px;padding-top:4px}
+ #modal{position:fixed;inset:0;background:rgba(20,30,40,.55);display:none;align-items:flex-start;justify-content:center;padding:40px 12px;overflow-y:auto;z-index:50}
+ #modal .panel{background:#fff;border-radius:14px;overflow:hidden;max-width:760px;width:94%;box-shadow:0 24px 70px rgba(0,0,0,.35)}
+ #modal .bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #d3dbe6;position:sticky;top:0;background:#fff}
+ #modal .bar a{color:#0a66c2;text-decoration:none;font-size:14px}
+ #modalBody{max-height:78vh;overflow-y:auto}
+ #modalBody img{max-width:100%}
+  </style></head>
 <body><div class="container">
-<h1>Live Transcription & Topic Matching</h1>
-<div class="log" style="margin-bottom:8px"><a href="/notes" style="color:#0a66c2">Browse Knowledge Base (/notes)  keep-ai index from data/</a></div>
-<div id="status" class="log">Connecting...</div>
-<div class="transcript" id="t"></div>
-</div>
-<script>
-const t=document.getElementById('t');
-const s=document.getElementById('status');
-const es=new EventSource('/ws');
-es.onopen=function(){s.textContent='Connected - Waiting for audio...';};
-es.onmessage=function(e){
-  s.textContent='Live';
-  const d=document.createElement('div');
-  d.className='line';
-  if(e.data.includes('[MIC]'))d.classList.add('mic');
-  else if(e.data.includes('[SYS]'))d.classList.add('sys');
-   else if(e.data.includes('[MATCH]')||e.data.includes('[NOTES]')||e.data.includes('[KEEP-AI]')||e.data.includes('[MEDIUM ARTICLES]')||e.data.includes('[KEEP-AI-W]')){
-     if(e.data.includes('[NOTES]')&&e.data.includes('Relevant Notes'))d.classList.add('sechead');
-     else if(e.data.includes('[KEEP-AI]')&&e.data.includes('matching topics'))d.classList.add('sechead');
-     else if(e.data.includes('[MEDIUM ARTICLES]')&&e.data.includes('matching words'))d.classList.add('sechead');
-     else{
-       if(e.data.includes('[MATCH]')||e.data.includes('[MEDIUM ARTICLES]'))d.classList.add('topics');
-       else if(e.data.includes('[NOTES]'))d.classList.add('notes');
-       else if(e.data.includes('[KEEP-AI')||e.data.includes('[KEEP-AI-W]'))d.classList.add('keepai');
-     }
-     const i=e.data.lastIndexOf('->');
-     if(i>=0){
-       const a=document.createElement('a');
-       a.href=e.data.slice(i+2).trim();
-       a.target='_blank';
-       a.rel='noopener';
-       a.textContent=e.data;
-       d.appendChild(a);
-       t.appendChild(d);
-       t.scrollTop=t.scrollHeight;
-       return;
-     }
-   }
-  d.textContent=e.data;
-  t.appendChild(d);
-  t.scrollTop=t.scrollHeight;
-};
-es.onerror=function(){s.textContent='Disconnected';};
-</script></body></html>'''
+ <h1>Live Transcription & Topic Matching</h1>
+ <div class="log" style="margin-bottom:8px"><a href="/notes" style="color:#0a66c2">Browse Knowledge Base (/notes)  keep-ai index from data/</a></div>
+ <div id="status" class="log">Connecting...</div>
+ <div class="transcript" id="t"></div>
+ </div>
+ <div id="modal"><div class="panel"><div class="bar"><span>Keep Note</span><a href="#" onclick="document.getElementById('modal').style.display='none';return false;">Close &times;</a></div><div id="modalBody"></div></div></div>
+ <script>
+ const t=document.getElementById('t');
+ const s=document.getElementById('status');
+ function openNote(url){
+   const id=(url.split('/note/')[1]||'').split(/[?#]/)[0];
+   fetch('/note/'+id).then(r=>r.text()).then(h=>{
+     const doc=new DOMParser().parseFromString(h,'text/html');
+     const style=doc.querySelector('style');
+     const wrap=doc.querySelector('.wrap')||doc.querySelector('.note')||doc.body;
+     document.getElementById('modalBody').innerHTML=(style?style.outerHTML:'')+wrap.outerHTML;
+     document.getElementById('modal').style.display='flex';
+   }).catch(err=>{document.getElementById('modalBody').textContent='Failed to load note: '+err;document.getElementById('modal').style.display='flex';});
+ }
+ const es=new EventSource('/ws');
+ es.onopen=function(){s.textContent='Connected - Waiting for audio...';};
+ es.onmessage=function(e){
+   s.textContent='Live';
+   const d=document.createElement('div');
+   d.className='line';
+   if(e.data.includes('[MIC]'))d.classList.add('mic');
+   else if(e.data.includes('[SYS]'))d.classList.add('sys');
+    else if(e.data.includes('[MATCH]')||e.data.includes('[NOTES]')||e.data.includes('[KEEP-AI]')||e.data.includes('[MEDIUM ARTICLES]')){
+      if(e.data.includes('[NOTES]')&&e.data.includes('Relevant Notes'))d.classList.add('sechead');
+      else if(e.data.includes('[KEEP-AI]')&&e.data.includes('matching topics'))d.classList.add('sechead');
+      else if(e.data.includes('[MEDIUM ARTICLES]')&&e.data.includes('matching words'))d.classList.add('sechead');
+      else{
+        if(e.data.includes('[MATCH]')||e.data.includes('[MEDIUM ARTICLES]'))d.classList.add('topics');
+        else if(e.data.includes('[NOTES]'))d.classList.add('notes');
+        else if(e.data.includes('[KEEP-AI'))d.classList.add('keepai');
+      }
+      const i=e.data.lastIndexOf('->');
+      if(i>=0){
+        const url=e.data.slice(i+2).trim();
+        const a=document.createElement('a');
+        a.textContent=e.data;
+        a.rel='noopener';
+        if(url.includes('/note/')){
+          a.href=url;
+          a.addEventListener('click',function(ev){ev.preventDefault();openNote(url);});
+        }else{
+          a.href=url;a.target='_blank';
+        }
+        d.appendChild(a);
+        t.appendChild(d);
+        t.scrollTop=t.scrollHeight;
+        return;
+      }
+    }
+   d.textContent=e.data;
+   t.appendChild(d);
+   t.scrollTop=t.scrollHeight;
+ };
+ es.onerror=function(){s.textContent='Disconnected';};
+ </script></body></html>'''
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
     daemon_threads = True
@@ -608,8 +684,8 @@ def render_note(nid):
     return html
 
 def run_server():
-    server = ThreadedHTTPServer(('0.0.0.0', 8080), Handler)
-    logger.info("Server started on http://localhost:8080")
+    server = ThreadedHTTPServer(('0.0.0.0', PORT), Handler)
+    logger.info(f"Server started on http://localhost:{PORT}")
     server.serve_forever()
 
 def find_devices():
@@ -650,16 +726,58 @@ def main():
     logger.info(f"Using devices: MIC={mic_idx}, SYS={sys_idx}")
     
     p = pyaudio.PyAudio()
-    mic_stream = p.open(format=pyaudio.paInt16, channels=1, rate=RATE, input=True,
-                       input_device_index=mic_idx, frames_per_buffer=CHUNK_SIZE)
+    def _native_rate(idx):
+        try:
+            pt = pyaudio.PyAudio()
+            r = int(pt.get_device_info_by_index(idx).get('defaultSampleRate') or RATE)
+            pt.terminate()
+            return r if r > 0 else RATE
+        except Exception:
+            return RATE
+
+    mic_rate = _native_rate(mic_idx)
+    mic_stream = p.open(format=pyaudio.paInt16, channels=1, rate=mic_rate, input=True,
+                        input_device_index=mic_idx, frames_per_buffer=CHUNK_SIZE)
     sys_stream = p.open(format=pyaudio.paInt16, channels=1, rate=RATE, input=True,
                        input_device_index=sys_idx, frames_per_buffer=CHUNK_SIZE)
-    
+    logger.info(f"Stream rates: MIC={mic_rate} Hz (native), SYS={RATE} Hz")
+
+    # Candidate (device, rate) list for MIC: primary first, then all other
+    # input devices -- a dead/ghost endpoint is skipped automatically on stall.
+    def _other_inputs(exclude):
+        pt = pyaudio.PyAudio()
+        outs = []
+        try:
+            n = pt.get_host_api_info_by_index(0).get('deviceCount', 0)
+            for i in range(n):
+                d = pt.get_device_info_by_index(i)
+                if d.get('maxInputChannels', 0) > 0 and i != exclude:
+                    outs.append(i)
+        finally:
+            pt.terminate()
+        return outs
+
+    mic_cands = [(mic_idx, mic_rate)]
+    if mic_rate != RATE:
+        mic_cands.append((mic_idx, RATE))
+    for o in _other_inputs(mic_idx):
+        r = _native_rate(o)
+        mic_cands.append((o, r))
+        if r != RATE:
+            mic_cands.append((o, RATE))
+
+    for _s, _d in ((mic_stream, mic_idx), (sys_stream, sys_idx)):
+        try:
+            if not _s.is_active():
+                _s.start_stream()
+        except Exception:
+            pass
+
     mic_q = queue.Queue()
     sys_q = queue.Queue()
-    
-    threading.Thread(target=audio_capture, args=(mic_stream, mic_q), daemon=True).start()
-    threading.Thread(target=audio_capture, args=(sys_stream, sys_q), daemon=True).start()
+
+    threading.Thread(target=audio_capture, args=(mic_stream, mic_q, 'MIC', mic_cands, p), daemon=True).start()
+    threading.Thread(target=audio_capture, args=(sys_stream, sys_q, 'SYS', [(sys_idx, RATE)], p), daemon=True).start()
     
     logger.info("Loading model...")
     model = load_model()
@@ -674,7 +792,7 @@ def main():
     threading.Thread(target=audio_process, args=(model, 'MIC', mic_q), daemon=True).start()
     threading.Thread(target=audio_process, args=(model, 'SYS', sys_q), daemon=True).start()
     
-    logger.info("Starting web server...\nOpen http://localhost:8080")
+    logger.info(f"Starting web server...\nOpen http://localhost:{PORT}")
     
     signal.signal(signal.SIGINT, lambda s, f: stop_event.set())
     signal.signal(signal.SIGTERM, lambda s, f: stop_event.set())

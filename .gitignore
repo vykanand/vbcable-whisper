@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Debug / scratch artifacts (not production code)
+_dbg.py
+_probe.py
+medium_probe.html
+topics_source.md
+topics_source_raw.html
+
+# Local transcription logs (optional, generated at runtime)
+call_transcript_*.md
+
+# Virtual envs
+venv/
+.venv/
+env/
+
+# keep-ai private data (Google Keep exports: may contain secrets).
+# App loads these from disk at runtime; never commit them.
+data/
+keep-inbox/

@@ -36,7 +36,7 @@ echo        What would you like to run?
 echo ============================================================
 echo.
 echo  1. Live Transcription Test  (Terminal output, saves to markdown)
-echo  2. Web Server              (Live streaming at http://localhost:8080)
+echo  2. Web Server              (Live streaming at http://localhost:9000)
 echo  3. Exit
 echo.
 
@@ -57,7 +57,7 @@ echo.
 echo Starting web server - any old server will be stopped first...
 echo.
 
-:: Kill any existing process on port 8080
+:: Kill any existing process on port 9000
 echo Checking for existing server...
 taskkill /F /IM python.exe 2>nul
 timeout /t 1 /nobreak >nul

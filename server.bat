@@ -32,7 +32,7 @@ if errorlevel 1 (
 
 echo.
 echo Starting web server...
-echo Open http://localhost:8080 in your browser
+echo Open http://localhost:9000 in your browser
 echo.
 python server.py
 
